@@ -1,0 +1,9 @@
+﻿  LjHttp.c
+e:\公司项目oem\ljhttp\ljhttp\ljhttp.c(467): warning C4090: “=”: 不同的“const”限定符
+    正在创建库 E:\公司项目OEM\LjHttp\Release\LJHTTP.lib 和对象 E:\公司项目OEM\LjHttp\Release\LJHTTP.exp
+  正在生成代码
+  1 of 29 functions ( 3.4%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
+  已完成代码的生成
+  LjHttp.vcxproj -> E:\公司项目OEM\LjHttp\Release\LJHTTP.dll

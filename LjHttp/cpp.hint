@@ -1,0 +1,2 @@
+#define LJHTTP_API __declspec(dllexport)
+#define LJHTTP_API __declspec(dllimport)

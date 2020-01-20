@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LocalDebuggerCommand>E:\公司项目GIT\taiyang_simple\Release\Sundaili_cata\太阳代理纯净版.exe</LocalDebuggerCommand>
+    <LocalDebuggerWorkingDirectory>E:\公司项目GIT\taiyang_simple\Release\Sundaili_cata\</LocalDebuggerWorkingDirectory>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+  </PropertyGroup>
+</Project>
