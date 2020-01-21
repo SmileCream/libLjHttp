@@ -152,6 +152,7 @@ static int CurlPublicMethod(CURL* curl, CurlParams* curl_params)
 	{
 		curl_easy_setopt(curl, CURLOPT_URL, curl_params->serverUrl);
 	}
+
 	curl_easy_setopt(curl, CURLOPT_PORT, curl_params->port);
 
 	//禁用掉alarm这种超时
@@ -181,7 +182,7 @@ static int CurlPublicMethod(CURL* curl, CurlParams* curl_params)
 	{
 		curl_easy_setopt(curl, CURLOPT_PROXY, curl_params->proxyUrl);
 		//判断是否存在https
-		if (!stristri(curl_params->proxyUrl, "https"))
+		if (stristri(curl_params->proxyUrl, "https"))
 		{
 			//隧道
 			curl_easy_setopt(curl, CURLOPT_HTTPPROXYTUNNEL, 1L);
@@ -193,6 +194,13 @@ static int CurlPublicMethod(CURL* curl, CurlParams* curl_params)
 		curl_easy_setopt(curl, CURLOPT_PROXYUSERPWD, curl_params->proxyNamePass);
 	}
 	curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
+
+	//curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);//0忽略证书检查 1进行检查
+	//curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0L);
+
+	curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, FALSE);
+	curl_easy_setopt(curl, CURLOPT_VERBOSE, 1);     //可以看到调试信息
+	curl_easy_setopt(curl, CURLOPT_SSLVERSION, 0);
 	/*
 	默认情况下libcurl完成一个任务以后，出于重用连接的考虑不会马上关闭,如果每次目标主机不一样，这里禁止重连接
 	每次执行完curl_easy_perform，licurl会继续保持与服务器的连接。接下来的请求可以使用这个连接而不必创建新的连接,如果目标主机是同一个的话。
@@ -486,7 +494,17 @@ LJHTTP_API bool HttpPostSimple(char *serverUrl, CurlHeadList* curlHeadP, const c
 	memset(&curl_params,0,sizeof(CurlParams));
 	curl_params.serverUrl = serverUrl;
 	curl_params.curlHeadP = curlHeadP;
-	curl_params.port = 80;
+	//判断是否存在https
+	if (stristri(serverUrl, "https"))
+	{
+		//https 端口
+		curl_params.port = 443;
+	}
+	else
+	{
+		//http 端口
+		curl_params.port = 80;
+	}
 	curl_params.connect_timeout = C_CONNECT_DEFAULT_TIMEOUT;
 	curl_params.timeout = C_DEFAULT_TIMEOUT;
 	curl_params.proxyUrl = NULL;//代理服务器为空
@@ -522,7 +540,18 @@ LJHTTP_API bool HttpGetSimple(char *serverUrl, CurlHeadList* curlHeadP, CurlResp
 	CurlParams curl_params;
 	curl_params.serverUrl = serverUrl;
 	curl_params.curlHeadP = curlHeadP;
-	curl_params.port = 80;
+	//判断是否存在https
+	if (stristri(serverUrl, "https"))
+	{
+		//https 端口
+		curl_params.port = 443;
+	}
+	else
+	{
+		//http 端口
+		curl_params.port = 80;
+	}
+	
 	curl_params.connect_timeout = C_CONNECT_DEFAULT_TIMEOUT;
 	curl_params.timeout = C_DEFAULT_TIMEOUT;
 	curl_params.proxyUrl = NULL;//代理服务器为空

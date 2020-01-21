@@ -10,6 +10,7 @@ extern "C" {
 	#include "LjHttp.h"
 }
 #pragma comment(lib,"LJHTTP.lib")
+#pragma comment(lib,"libcurl.lib")
 
 
 char* stristri(char * inBuffer, char * inSearchStr)
@@ -46,13 +47,33 @@ static int ProgressCallback(void *pParam, double dltotal, double dlnow, double u
 
 int main()
 {
+	CurlGlobalInitResource();
+
+	////测试
+	//CURL * m_pCUrl= curl_easy_init();
+	//CURLcode res;
+	//curl_easy_setopt(m_pCUrl, CURLOPT_URL, "https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=gQGp7zwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAyZk95eTR6bE9kSjIxNnRYQmh1MXIAAgSVdCVeAwQIBwAA");
+	//curl_easy_setopt(m_pCUrl, CURLOPT_LOW_SPEED_TIME, 10L);
+	//curl_easy_setopt(m_pCUrl, CURLOPT_LOW_SPEED_LIMIT, 50L);
+	//curl_easy_setopt(m_pCUrl, CURLOPT_SSL_VERIFYPEER, 0);
+	//curl_easy_setopt(m_pCUrl, CURLOPT_MAX_RECV_SPEED_LARGE, 2000000L);/*下载最高速度*/
+	//curl_easy_setopt(m_pCUrl, CURLOPT_VERBOSE, 1);     //可以看到调试信息
+	////禁用掉alarm这种超时
+	//curl_easy_setopt(m_pCUrl, CURLOPT_NOSIGNAL, 1);
+	//curl_easy_setopt(m_pCUrl, CURLOPT_FOLLOWLOCATION, 1L);
+	//curl_easy_setopt(m_pCUrl, CURLOPT_SSLVERSION, 0);
+	//curl_easy_setopt(m_pCUrl, CURLOPT_FORBID_REUSE, 1);
+	//curl_easy_setopt(m_pCUrl, CURLOPT_PORT, 80);
+	//res = curl_easy_perform(m_pCUrl);
+	//curl_easy_cleanup(m_pCUrl);
+
 	CurlHeadList *chl = CreateCurlHeadList();
 	//测试头部，这里无实际意义
 	char key[] = "zm-auth-name";
 	char value[] = "jg";
 	PushBackCurlHeadList(chl, key, value);
 	//目标服务器
-	string url = "http://myip.top/";
+	string url = "https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=gQGp7zwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAyZk95eTR6bE9kSjIxNnRYQmh1MXIAAgSVdCVeAwQIBwAA";
 	char *serverUrl = (char*)malloc(url.size() + 1);
 	memcpy(serverUrl, url.c_str(), url.size() + 1);
 
@@ -82,7 +103,7 @@ int main()
 	memset(&curl_params, 0, sizeof(CurlParams));
 	curl_params.serverUrl = serverUrl;
 	curl_params.curlHeadP = chl;
-	curl_params.port = 80;
+	curl_params.port = 443;
 	curl_params.connect_timeout = 600;
 	curl_params.timeout = 600;
 	//curl_params.proxyUrl = _proxyUrl;
@@ -114,6 +135,8 @@ int main()
 
 	printf("%s\n","----------------------end------------------------");
 	FreeCurlHeadList(chl);
+
+	CurlGlobalCleanupResource();
 }
 
 // 运行程序: Ctrl + F5 或调试 >“开始执行(不调试)”菜单
